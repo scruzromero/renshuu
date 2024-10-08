@@ -42,16 +42,27 @@ fetch('db/exercises.json')
             windowCloseItem.classList.add("fa-sharp", "fa-solid", "fa-xmark", "windowCloseIcon");
             windowDecor.appendChild(windowCloseItem);
 
+            // Cajita de todo lo demás
+            const startScreenMainContent = document.createElement('div');
+            startScreenMainContent.id = "startScreenMainContent";
+            startScreenDIV.appendChild(startScreenMainContent);
+
             // Instrucciones o descripción
             const description = document.createElement('p');
             description.textContent = 'Selecciona la dificultad y el nivel para comenzar tu sesión de estudio.';
             description.classList.add("instrucciones");
             description.classList.add("startScreenText");
-            startScreenDIV.appendChild(description);
+            startScreenMainContent.appendChild(description);
+
+            // Para el futuro... configuración de la sesión
+            const sessionConfigMenu = document.createElement('div');
+            sessionConfigMenu.id = "sessionConfigMenu";
+            startScreenMainContent.appendChild(sessionConfigMenu);
         
             // Selección de dificultad
             const difficultySelector = document.createElement('div');
-            startScreenDIV.appendChild(difficultySelector);
+            difficultySelector.id = "difficultySelector";
+            sessionConfigMenu.appendChild(difficultySelector);
 
             const difficultyLabel = document.createElement('label');
             difficultyLabel.classList.add('startScreenLabel');
@@ -72,7 +83,7 @@ fetch('db/exercises.json')
             // Selección de nivel JLPT
             const levelSelector = document.createElement('div');
             levelSelector.id = "levelSelector";
-            startScreenDIV.appendChild(levelSelector);
+            sessionConfigMenu.appendChild(levelSelector);
 
             const levelLabel = document.createElement('label');
             levelLabel.classList.add('startScreenLabel');
@@ -89,6 +100,27 @@ fetch('db/exercises.json')
                 levelSelect.appendChild(option);
             });
             levelSelector.appendChild(levelSelect);
+
+            // Cantidad de ejercicios
+            const exercisesCountSelector = document.createElement('div');
+            exercisesCountSelector.id = "exercisesCountSelector";
+            sessionConfigMenu.appendChild(exercisesCountSelector);
+
+            const exercisesCountLabel = document.createElement('label');
+            exercisesCountLabel.classList.add('startScreenLabel');
+            exercisesCountLabel.id = ("exercisesCountLabel");
+            exercisesCountLabel.textContent = 'Cantidad de ejercicios: ';
+            exercisesCountSelector.appendChild(exercisesCountLabel);
+
+            const exercisesCountSelect = document.createElement('select');
+            exercisesCountSelect.id = 'exercisesCountSelect';
+            for (let i = 1; i <= 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                exercisesCountSelect.appendChild(option);
+            }
+            exercisesCountSelector.appendChild(exercisesCountSelect);
         
             // Botón para comenzar
             const startButton = document.createElement('button');
@@ -97,12 +129,13 @@ fetch('db/exercises.json')
             startButton.onclick = () => {
                 const selectedDifficulty = difficultySelect.value;
                 const selectedLevel = levelSelect.value;
-                startStudySession(selectedDifficulty, selectedLevel);
+                const exercisesCount = parseInt(exercisesCountSelect.value);
+                startStudySession(selectedDifficulty, selectedLevel, exercisesCount);
             };
-            startScreenDIV.appendChild(startButton);
+            startScreenMainContent.appendChild(startButton);
         }
 
-        function startStudySession(selectedDifficulty, selectedLevel) {
+        function startStudySession(selectedDifficulty, selectedLevel, exercisesCount) {
             // Filtrar ejercicios según dificultad y nivel
             ejercicioSession = window.data.ejercicios.filter(ejercicio => {
                 return ejercicio.dificultad === selectedDifficulty && ejercicio['nivel JLPT'] === selectedLevel;
@@ -113,6 +146,12 @@ fetch('db/exercises.json')
                 return;
             }
         
+            // Desordenar los ejercicios aleatoriamente
+            ejercicioSession = ejercicioSession.sort(() => Math.random() - 0.5);
+
+            // Limitar la sesión a la cantidad de ejercicios seleccionados
+            ejercicioSession = ejercicioSession.slice(0, exercisesCount);
+
             // Inicializar variables de la sesión
             currentExerciseIndex = 0;
             currentQuestionIndex = 0;
@@ -173,7 +212,7 @@ fetch('db/exercises.json')
             questionsDIV.appendChild(instruccionesElement);
 
             const textoElement = document.createElement('p');
-            textoElement.textContent = ejercicio.texto;
+            textoElement.innerHTML = ejercicio.texto.replace(/\n/g, '<br>');
             textoElement.classList.add('textoEjercicio');
             questionsDIV.appendChild(textoElement);
 
@@ -207,7 +246,6 @@ fetch('db/exercises.json')
                 textoLecturaElement.style.marginBottom = "1.5rem";
                 textoLecturaElement.style.marginLeft = "3%";
                 textoLecturaElement.style.marginRight = "3%";
-                textoLecturaElement.style.textAlign = "center";
 
             nextQuestionDIV.innerHTML = '';
             showQuestion();

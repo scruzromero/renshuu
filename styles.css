@@ -68,12 +68,22 @@ h2 {
     padding: 5px;
 }
 
+.mainContent {
+    display: grid;
+    place-items: center;
+}
+
 /* Estilos del cuestionario */
 #startScreen,
 .mainPort {
     margin: 2em 2em 0 2em;
     background-color: var(--color-extra-light);
     border: 2px solid black;
+    max-width: 700px;
+}
+
+#startScreen {
+    text-align: center;
 }
 
 .windowDecor {
@@ -102,53 +112,68 @@ h2 {
     margin-right: 0.5em;
 }
 
-#startScreen {
-    text-align: center;
+#startScreenMainContent {
+    display: grid;
+    place-items: center;
 }
 
-.startScreenText {
-    margin-top: 1em;
+#sessionConfigMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1.2rem;
+    padding: 1rem;
+    max-width: 350px;
+    border: 2px solid black;
+    background-color: white;
 }
 
 .startScreenLabel {
     font-family: var(--font-ui);
     font-weight: 500;
-    font-size: 0.9rem;;
+    font-size: 0.8rem;;
     color: var(--color-darker);
+    text-align: left;
+    margin-right: 15px;
 }
 
-#levelSelector {
-    margin-top: 0.3rem;
+#difficultySelector,
+#levelSelector,
+#exercisesCountSelector {
+    margin: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #difficultySelect,
-#levelSelect {
-    text-align: center;
+#levelSelect,
+#exercisesCountSelect {
+    text-align: right;
     background-color: white;
     border: 2px solid black;
     border-radius: 0px;
     padding: 0.2rem;
+    min-width: 100px;
 }
 
 .instrucciones {
     font-size: 1.2rem;
+    color: var(--text);
+    margin: 1.2rem 1.2rem 0 1.2rem;
 }
 
 .instruccionesLectura {
     font-size: 1rem;
+    color: var(--color-darker);
+    margin-bottom: 1em;
 }
 
 .instrucciones,
 .instruccionesLectura {
     font-family: var(--font-eng);
-    color: var(--color-darker);
-    margin-bottom: 1em;
     text-align: center;
     padding: 0.5em;
-}
-
-.instruccionesLectura {
-    color: var()
 }
 
 .textoEjercicio {
@@ -228,7 +253,7 @@ h2 {
     cursor: pointer;
     display: block;
     padding: 0.75em 1em;
-    margin: 2.5em auto 1.5em auto;
+    margin: 0.6em auto 1.8em auto;
     max-width: 100%;
     box-shadow: 1px 1px 0px 0px black, 2px 2px 0px 0px black;
     position: relative;
@@ -270,6 +295,8 @@ h2 {
 .foot {
     margin: 2em;
     text-align: right;
+    display: grid;
+    place-items: center;
 }
 
 #footer {
@@ -277,6 +304,7 @@ h2 {
     font-family: var(--font-eng);
     color: var(--color-main-dark);
     line-height: 1.1rem;
+    text-align: center;
 }
 
 #overlay {
